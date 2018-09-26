@@ -1,18 +1,34 @@
-import React, { Component } from "react";
-import { Card, CardImg, CardText, CardBody, CardTitle } from 'reactstrap';
+import React from 'react';
+import { Card, CardImg, CardText, CardBody,
+    CardTitle } from 'reactstrap';
 import moment from "moment";
 
-class Dishdetail extends Component {
+    function RenderDish({dish}) {
+        if (dish != null)
+            return(
+                <Card>
+                    <CardImg top src={dish.image} alt={dish.name} />
+                    <CardBody>
+                        <CardTitle>{dish.name}</CardTitle>
+                        <CardText>{dish.description}</CardText>
+                    </CardBody>
+                </Card>
+            );
+        else
+            return(
+                <div></div>
+            );
+    }
 
-    renderComments() {
-        if(this.props.dish.comments.length === 0) {
+    function RenderComments({comments}) {
+        if(comments.length === 0) {
             return (<div></div>)
         } else {
             return (
                 <div>
                     <h4>Comments</h4>
                     {
-                        this.props.dish.comments.map(function(comment){
+                        comments.map(function(comment){
                             return <CardText key={comment.id}>{comment.comment}<br/>
                                 -- {comment.author}, {moment(comment.date).format('MMM DD, YYYY')}
                                 </CardText>
@@ -24,22 +40,16 @@ class Dishdetail extends Component {
 
     }
 
-    render() {
-        if(this.props.dish !== undefined) {
+    const DishDetail = (props) => {
+        if(props.dish !== undefined) {
             return (
                 <div className="container">
                     <div className="row">
                         <div className="col-12 col-md-5 m-1">
-                            <Card>
-                                <CardImg top src={this.props.dish.image} alt={this.props.dish.name} />
-                                <CardBody>
-                                    <CardTitle>{this.props.dish.name}</CardTitle>
-                                    <CardText>{this.props.dish.description}</CardText>
-                                </CardBody>
-                            </Card>
+                            <RenderDish dish={props.dish} />
                         </div>
                         <div className="col-12 col-md-5 m-1">
-                            {this.renderComments()}
+                            <RenderComments comments={props.dish.comments} />
                         </div>
                     </div>
                 </div>
@@ -49,6 +59,4 @@ class Dishdetail extends Component {
         }
     }
 
-}
-
-export default Dishdetail;
+export default DishDetail;
